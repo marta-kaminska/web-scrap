@@ -10,26 +10,25 @@ class Promocjebot:
     
     def login(self):
         bot = self.bot
+
         #otwarcie strony
         bot.get("https://app.szopi.pl/")
         time.sleep(3)
+
         #zaakceptowanie ciasteczek
-        akceptuj = bot.find_element_by_class_name("ng-binding")
-        akceptuj.click()
+        bot.find_element_by_class_name("ng-binding").click()
+
         #wejscie w profil klienta
         produkty = bot.find_elements_by_class_name("cta-button")
         for element in produkty:
             if element.text == "Zrób zakupy":
                 element.click()
+
         #zalogowanie do profilu klienta
-        email = bot.find_element_by_id("formE-mail")
-        password = bot.find_element_by_id("formHasło(minimum6znaków)")
-        email.clear()
-        password.clear()
-        email.send_keys(self.email)
-        password.send_keys(self.password)
+        bot.find_element_by_id("formE-mail").send_keys(self.email)
+        bot.find_element_by_id("formHasło(minimum6znaków)").send_keys(self.password)
         time.sleep(2)
-        password.send_keys(Keys.RETURN)
+        bot.find_element_by_id("formHasło(minimum6znaków)").send_keys(Keys.RETURN)
         time.sleep(5)
 
     def sprawdz_promocje(self, nazwa_sklepu):
@@ -40,10 +39,11 @@ class Promocjebot:
             if element.text == nazwa_sklepu:
                 element.click()
         time.sleep(3)
+
         #wejscie w kategorie produktow
-        kategorie = bot.find_element_by_class_name("categories-toggler")
-        kategorie.click()
+        bot.find_element_by_class_name("categories-toggler").click()
         time.sleep(2)
+
         #wejscie w aktualne promocje
         przyciski = bot.find_elements_by_class_name("link")
         if len(przyciski) > 2:
@@ -75,5 +75,5 @@ class Promocjebot:
 
 a = Promocjebot("login", "haslo")
 a.login()
-a.sprawdz_promocje("Lidl")
+a.sprawdz_promocje("Biedronka")
 a.wylogowanie()
